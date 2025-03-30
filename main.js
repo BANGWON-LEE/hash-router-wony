@@ -3,17 +3,21 @@ import { home } from './pages/home.js'
 import { notFound } from './pages/notFound.js'
 import { sub } from './pages/sub.js'
 
-function choicePage(pageObj) {
+function resultPage(resultPage) {
   const target = document.querySelector('#root')
+  target.innerHTML = resultPage
+}
+
+function choicePage(pageObj) {
   const hashPath = location.hash.substring(1)
 
-  const viewPage = pageObj.find(el => {
-    return el.key === hashPath
+  const page = pageObj.find(el => {
+    return el.key.match(hashPath)
   })
 
-  const resultPage = viewPage !== undefined ? viewPage.view : notFound()
+  const choicedPage = page !== undefined ? page.view : notFound()
 
-  target.innerHTML = resultPage
+  resultPage(choicedPage)
 }
 
 function addPage() {
@@ -28,7 +32,7 @@ function addPage() {
 }
 
 function movePage(id) {
-  const hashId = id === '' ? 'home' : id
+  const hashId = id === '/' ? '/' : '/' + id
   location.hash = hashId
 }
 
@@ -36,9 +40,9 @@ function viewPage() {
   // 라우트를 추가한다 생각하는 개념의 함수
   const pageObj = addPage()
 
-  pageObj({ key: 'home', view: home() })
-  pageObj({ key: 'sub', view: sub() })
-  pageObj({ key: 'another', view: another() })
+  pageObj({ key: '/', view: home() })
+  pageObj({ key: '/sub', view: sub() })
+  pageObj({ key: '/another', view: another() })
 
   return choicePage(pageObj())
 }
