@@ -54,10 +54,8 @@ function viewPage() {
 
 function loadInitialPage() {
   //초기 시작 함수.
-  const target = document.querySelector('#root')
   const result = findPage('/')
-
-  target.innerHTML = result.view
+  resultPage(result.view)
 }
 
 window.addEventListener('DOMContentLoaded', loadInitialPage)
