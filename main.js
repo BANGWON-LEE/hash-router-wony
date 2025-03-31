@@ -52,7 +52,7 @@ function viewPage() {
   return pageObj()
 }
 
-function initialPage() {
+function loadInitialPage() {
   //초기 시작 함수.
   const target = document.querySelector('#root')
   const result = findPage('/')
@@ -60,6 +60,6 @@ function initialPage() {
   target.innerHTML = result.view
 }
 
-window.addEventListener('DOMContentLoaded', initialPage)
+window.addEventListener('DOMContentLoaded', loadInitialPage)
 window.addEventListener('click', event => movePage(event.target.id))
 window.addEventListener('hashchange', choicePage)
