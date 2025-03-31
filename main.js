@@ -8,12 +8,17 @@ function resultPage(resultPage) {
   target.innerHTML = resultPage
 }
 
-function choicePage(pageObj) {
-  const hashPath = location.hash.substring(1)
-
+function findPage(path) {
+  const pageObj = viewPage()
   const page = pageObj.find(el => {
-    return el.key.match(hashPath)
+    return el.key.match(path)
   })
+  return page
+}
+
+function choicePage() {
+  const path = location.hash.substring(1)
+  const page = findPage(path)
 
   const choicedPage = page !== undefined ? page.view : notFound()
 
@@ -44,15 +49,17 @@ function viewPage() {
   pageObj({ key: '/sub', view: sub() })
   pageObj({ key: '/another', view: another() })
 
-  return choicePage(pageObj())
+  return pageObj()
 }
 
 function initialPage() {
   //초기 시작 함수.
   const target = document.querySelector('#root')
-  target.innerHTML = home()
+  const result = findPage('/')
+
+  target.innerHTML = result.view
 }
 
 window.addEventListener('DOMContentLoaded', initialPage)
 window.addEventListener('click', event => movePage(event.target.id))
-window.addEventListener('hashchange', viewPage)
+window.addEventListener('hashchange', choicePage)
