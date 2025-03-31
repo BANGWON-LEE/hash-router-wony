@@ -9,9 +9,9 @@ function resultPage(resultPage) {
 }
 
 function findPage(path) {
-  const pageObj = viewPage()
+  const pageObj = viewPage(addPage())
   const page = pageObj.find(el => {
-    return el.key.match(path)
+    return el.key === path
   })
   return page
 }
@@ -22,6 +22,7 @@ function choicePage() {
 
   const choicedPage = page !== undefined ? page.view : notFound()
 
+  // return choicedPage
   resultPage(choicedPage)
 }
 
@@ -41,9 +42,9 @@ function movePage(id) {
   location.hash = hashId
 }
 
-function viewPage() {
+function viewPage(pageObj) {
   // 라우트를 추가한다 생각하는 개념의 함수
-  const pageObj = addPage()
+  // const pageObj = addPage()
 
   pageObj({ key: '/', view: home() })
   pageObj({ key: '/sub', view: sub() })
