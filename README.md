@@ -13,6 +13,6 @@
 3. addEventListener('hasChange'...
 - href에 #을 붙인 a태그를 클릭하면 이벤트 리스너의 'hashChane가 인식하여 경로에 맞는 페이지를 보여주게 하였다.
 
-<todo List>
+<해야할 것>
 <br/>
-1) 404 notFound 페이지 구현해야 함
+1. 404 notFound 페이지 구현해야 함
