@@ -1,64 +1,51 @@
-import { another } from './pages/another.js'
-import { home } from './pages/home.js'
-import { notFound } from './pages/notFound.js'
-import { sub } from './pages/sub.js'
-
-function resultPage(resultPage) {
-  const target = document.querySelector('#root')
-  target.innerHTML = resultPage
-}
-
-function findPage(path) {
-  const pageObj = viewPage(addPage())
-  const page = pageObj.find(el => {
-    return el.key === path
-  })
-  return page
-}
-
-function choicePage() {
-  const path = location.hash.substring(1)
-  const page = findPage(path)
-
-  const choicedPage = page !== undefined ? page.view : notFound()
-
-  // return choicedPage
-  resultPage(choicedPage)
-}
-
-function addPage() {
-  // 클로저를 사용하여 페이지가 추가될 때 배열에 저장될 수 있도록 진행
+//3번
+function choicePageList() {
   const pageObj = []
-  return function (page) {
-    if (page !== undefined) {
-      pageObj.push(page)
-    }
-    return pageObj
+  // console.log('RRRR', pageObj)
+  return {
+    get: function () {
+      return pageObj
+    },
+    set: function (page) {
+      if (page !== undefined) {
+        pageObj.push(page)
+        // return pageObj
+      }
+    },
   }
 }
 
-function movePage(id) {
-  const hashId = id === '/' ? '/' : '/' + id
-  location.hash = hashId
+// 4번
+const pageList = choicePageList()
+// console.log('getAAA', getPage)
+
+//6번
+function resultPage(resultPage) {
+  const target = document.querySelector('#root')
+  target.innerHTML = resultPage.page
 }
 
-function viewPage(pageObj) {
-  // 라우트를 추가한다 생각하는 개념의 함수
-  // const pageObj = addPage()
+//5번
+function choicePage() {
+  const pageObj = pageList.get()
+  const path = location.hash.substring(1) || '/'
 
-  pageObj({ key: '/', view: home() })
-  pageObj({ key: '/sub', view: sub() })
-  pageObj({ key: '/another', view: another() })
+  const page = pageObj.find(el => {
+    return el.path === path
+  })
 
-  return pageObj()
+  resultPage(page)
 }
 
-function loadInitialPage() {
-  //초기 시작 함수.
-  const result = findPage('/')
-  resultPage(result.view)
+//2번
+export function registerRoute(path, page) {
+  // const pageList = choicePageList()
+  // console.log('fefefe', path, page)
+  //4번
+  pageList.set({ path: path, page: page })
 }
 
-window.addEventListener('DOMContentLoaded', loadInitialPage)
-window.addEventListener('click', event => movePage(event.target.id))
+// console.log('pageList', pageList.getPageList())
+
 window.addEventListener('hashchange', choicePage)
+window.addEventListener('DOMContentLoaded', choicePage)
