@@ -1,23 +1,17 @@
 //3번
-function choicePageList() {
-  const pageObj = []
-  // console.log('RRRR', pageObj)
+function pageList() {
+  const pageArr = []
   return {
     get: function () {
-      return pageObj
+      return pageArr
     },
     set: function (page) {
-      if (page !== undefined) {
-        pageObj.push(page)
-        // return pageObj
-      }
+      pageArr.push(page)
     },
   }
 }
 
-// 4번
-const pageList = choicePageList()
-// console.log('getAAA', getPage)
+const pagesInfo = pageList()
 
 //6번
 function resultPage(resultPage) {
@@ -26,12 +20,13 @@ function resultPage(resultPage) {
 }
 
 //5번
-function choicePage() {
-  const pageObj = pageList.get()
+export function choicePage() {
+  const pageObj = pagesInfo.get()
   const path = location.hash.substring(1) || '/'
 
   const page = pageObj.find(el => {
-    return el.path === path
+    const result = el.path === path ? el.path === path : el.path === '*'
+    return result
   })
 
   resultPage(page)
@@ -39,13 +34,9 @@ function choicePage() {
 
 //2번
 export function registerRoute(path, page) {
-  // const pageList = choicePageList()
-  // console.log('fefefe', path, page)
   //4번
-  pageList.set({ path: path, page: page })
+  pagesInfo.set({ path: path, page: page })
 }
 
-// console.log('pageList', pageList.getPageList())
-
+//7번
 window.addEventListener('hashchange', choicePage)
-window.addEventListener('DOMContentLoaded', choicePage)
