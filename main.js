@@ -33,10 +33,14 @@ export function choicePage() {
 }
 
 //2번
-export function registerRoute(path, page) {
+export function registerHashRouter(path, page) {
   //4번
   pagesInfo.set({ path: path, page: page })
 }
 
 //7번
 window.addEventListener('hashchange', choicePage)
+
+// 패스 파라미터 고민
+// 1. 패스 파라미터가 있는 url 라우트를 등록하기
+// 2.
