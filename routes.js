@@ -9,7 +9,7 @@ import { subPath } from './pages/subPath.js'
 
 registerHashRouter('#/', home())
 registerHashRouter('#/sub', sub())
-registerHashRouter('#/sub/:id', subPath())
-// registerHashRouter('/sub/:title/:content', params => `<div>${params}</div>`)
+registerHashRouter('#/sub/:id', subPath)
+registerHashRouter('#/sub/:id/:content', subPath)
 registerHashRouter('#/another', another())
 registerNotFoundRouter(notFound())

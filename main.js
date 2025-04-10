@@ -16,64 +16,66 @@ const pagesInfo = pageList()
 //6번
 function resultPage(resultPage) {
   const target = document.querySelector('#root')
+  console.log('resultPage', resultPage)
   if (resultPage === undefined)
     return (target.innerHTML = registerNotFoundRouter())
-  target.innerHTML = resultPage.page
+  target.innerHTML = resultPage
 }
 
 //5번
 export function choicePage() {
-  /**
-   * 등록
-   * 1. user/:id
-   * 2. user/:id => "user" / ":id"
-   *
-   * 방문
-   * 1. user/123
-   * 2. "user",  ":id" => ?? =>  user, 123 => matched
-   * 3 * 2. "user", ":id" => ?? =>  user, 123, 456 => unmatched
-   *
-   * 경로 매치
-   * user/123
-   * 1. current, route => 분리한 세그먼트의 길이가 동일한지 체크
-   * 2. if !route[0].include(":") route[0] === current[0] mached true
-   * 3. else matched false[]
-   */
   const pageObj = pagesInfo.get()
   const path = location.hash || '#/'
 
   const page = pageObj.find(el => {
     const pathParamsVaild = pathParams(el, path)
-
-    // const result = el.path === path ? el.path === path : el.path === '*'
     return pathParamsVaild
   })
 
-  console.log('gggppp', page)
+  console.log('wony page', page)
 
-  resultPage(page)
+  const pathPage = getPathParamsPage(path)
+  const pathType = typeof page?.page
+
+  const currentPageStatus = getPage(pathType, pathPage, page)
+
+  resultPage(currentPageStatus)
+}
+
+const getPage = function (pathType, pathPage, page) {
+  console.log('getType', pathType)
+
+  switch (pathType) {
+    case 'function':
+      return page.page(pathPage)
+    case 'undefined':
+      return undefined
+    default:
+      return page.page
+  }
+}
+
+function getPathParamsPage(path) {
+  const dividePath = path.split('/')
+  const result = dividePath.filter((path, index) => {
+    return index > 1 && path
+  })
+
+  return result
 }
 
 function pathParams(el, path) {
   const visitPath = path.split('/')
   const routerPath = el.path.split('/')
-  // console.log('checkPath', visitPath, '<===>', routerPath, el.path)
-  // console.log('router!!', !routerPath.includes(':'))
   const pathParamsChecking = routerPath.filter((el, index) => {
-    // console.log('elel', el)
     return el.includes(':')
   })
-  if (visitPath.length !== routerPath.length) return
-  // console.log('nowCheck', pathParamsChecking)
+  if (visitPath.length !== routerPath.length || visitPath[1] !== routerPath[1])
+    return undefined
   if (pathParamsChecking.length > 0) {
-    // el.page('fefefefe')
-    // console.log('f1', el)
-    //  resultPage(page('fefefefe'))
     return el
-    // return
   } else {
-    // console.log('f2', el)
-    return el.path === path ? el.path === path : el.path === '*'
+    return el.path === path ? el.path === path : null
   }
 }
 
@@ -110,7 +112,7 @@ window.addEventListener('hashchange', choicePage)
 // 1. registerHashRouter부분 경로에 해쉬 넣기 ==> ok
 // 2. 코드 응집도 높이고 ( 사방으로 registerHashRouter가 쓰이지 않도록 )
 // 3. 중복 path 방지
-// 4. path parameter 구현하기!
+// 4. path parameter 구현하기! ====> ok
 // 5. notFound 경로로 없이 해도 됨 ====> ok
 // 6. 이후에 history router 구현.
 
