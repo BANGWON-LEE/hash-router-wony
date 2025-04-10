@@ -16,7 +16,6 @@ const pagesInfo = pageList()
 //6번
 function resultPage(resultPage) {
   const target = document.querySelector('#root')
-  console.log('resultPage', resultPage)
   if (resultPage === undefined)
     return (target.innerHTML = registerNotFoundRouter())
   target.innerHTML = resultPage
@@ -32,8 +31,6 @@ export function choicePage() {
     return pathParamsVaild
   })
 
-  console.log('wony page', page)
-
   const pathPage = getPathParamsPage(path)
   const pathType = typeof page?.page
 
@@ -43,8 +40,6 @@ export function choicePage() {
 }
 
 const getPage = function (pathType, pathPage, page) {
-  console.log('getType', pathType)
-
   switch (pathType) {
     case 'function':
       return page.page(pathPage)
